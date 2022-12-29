@@ -5,6 +5,7 @@ data = pd.read_csv("carsToCollect.csv",  engine='python')
 data_dict = data.to_dict(orient="records")
 
 
+
 for x in data_dict:
     make = x.get("Make")
     model = x.get("Model")
