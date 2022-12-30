@@ -130,6 +130,3 @@ def getCars(make, model, year):
               
                 data.to_csv(fileName, sep=',', encoding='utf-8', index=False)
                 driver.close()
-
-    
-getCars("Ford","Fiesta", "2006")
