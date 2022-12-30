@@ -51,5 +51,6 @@ def getTrendLineParamsFunc(carDataDicts):
     # plt.plot(miles, price, "ko")
     # plt.plot(miles, price2, "ko", color="green") 
     # plt.show()
+    numberOfDataPoints = len(miles)
 
-    return(popt[0], popt[1])
+    return(popt[0], popt[1], numberOfDataPoints )
