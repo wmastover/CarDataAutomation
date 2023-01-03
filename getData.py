@@ -14,6 +14,11 @@ data_dict = data.to_dict(orient="records")
 
 date = datetime.today().strftime('%d%m%Y')
 # run web scraper for each car / year in carsToCollect.csv
+
+logFileName = date + "logFile.txt"
+f = open(logFileName, "a")
+
+
 for x in data_dict:
     make = x.get("Make")
     model = x.get("Model")
@@ -23,9 +28,13 @@ for x in data_dict:
 
     #run get cars function for all years of each model
     while x < 2021:
-        getCars(make, model, str(x), date)
-        x = x + 1
+      getCars(make, model, str(x), date)
+      logLine = make + model + str(x) + " has completed" + "\n"
+      f.write(logLine)
+      
+      x = x + 1
 
+f.close()
 
 # import credentials for firebase 
 cwd = os.getcwd()
