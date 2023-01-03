@@ -15,7 +15,7 @@ data_dict = data.to_dict(orient="records")
 date = datetime.today().strftime('%d%m%Y')
 # run web scraper for each car / year in carsToCollect.csv
 
-logFileName = date + "logFile.txt"
+logFileName = date + "/logFile.txt"
 f = open(logFileName, "a")
 
 
