@@ -5,21 +5,19 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from datetime import datetime
+
 import os
 from selenium.webdriver.chrome.options import Options
 
 #go through an autotrader search and get the   
-def getCars(make, model, year):
-        date = datetime.today().strftime('%d%m%Y')
-
-        path = date
+def getCars(make, model, year, date):
+        
         # Check whether the specified path exists or not
-        isExist = os.path.exists(path)
+        isExist = os.path.exists(date)
         if not isExist:
 
             # Create a new directory because it does not exist
-            os.makedirs(path)
+            os.makedirs(date)
 
         fileName = (date + "/" + make + " " + model + " " + year + ".csv")
  
@@ -53,15 +51,15 @@ def getCars(make, model, year):
         
         done = False
         lines = []
+        count = 0
+
         while done == False:
             time.sleep(5)
             productCards = driver.find_elements(By.CLASS_NAME, "search-page__result")
             
-            
-
             for x in productCards:
                 try:
-                    link = x.find_element(By.CLASS_NAME, "listing-fpa-link").get_attribute("href")
+                    link = x.find_element(By.CLASS_NAME, "listing-fpa-link").get_attribute("href").split("?")[0]
                     
                     imageLink = x.find_element(By.CLASS_NAME, "product-card-image__main-image").get_attribute("src")
                     
@@ -105,28 +103,33 @@ def getCars(make, model, year):
                             valid = False
 
                         if valid == True:
-                            line = {"price": price, "mileage": mileage, "engineSize": engineSize, "transmission":  transmission, "fuelType": fuelType, "link": link, "imageLink": imageLink}
-                            
-                            if line not in lines:
-                                lines.append(line)
-                        else:
-                            line = {"price": price, "mileage": mileage, "engineSize": engineSize, "transmission":  transmission, "fuelType": fuelType, "link": link, "imageLink": imageLink}
-                            
+                            line = {"price": price, "mileage": mileage, "engineSize": engineSize, "transmission":  transmission, "fuelType": fuelType, "link": link, "imageLink": imageLink} 
+                            lines.append(line)         
 
                     except:
                         print("error in section 2")
                 
             try:
                 driver.find_element(By.CLASS_NAME, "pagination--right__active").click()
+                count = count + 1
+                print("Going through page " + str(count))
             except:
                 done= True
                 #convert array of dicts to dataframe
+
+                seen = set()
+                newLines = []
+                for d in lines:
+                    t = tuple(d.items())
+                    if t not in seen:
+                        seen.add(t)
+                        newLines.append(d)
                 
-                data = pd.DataFrame.from_dict(lines, orient='columns', dtype=None, columns=None)
+                data = pd.DataFrame.from_dict(newLines, orient='columns', dtype=None, columns=None)
                 
                 #remove index column
                 data.reset_index()
+
                 #print dataframe to csv
-              
                 data.to_csv(fileName, sep=',', encoding='utf-8', index=False)
-                driver.close()
+                driver.quit()
