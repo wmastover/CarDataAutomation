@@ -2,7 +2,7 @@
 #For each year, it will go through data files, remove duplicates, and output a trend
 #line equation,
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import pandas as pd
 import re
