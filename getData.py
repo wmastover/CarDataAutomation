@@ -15,6 +15,12 @@ data_dict = data.to_dict(orient="records")
 date = datetime.today().strftime('%d%m%Y')
 # run web scraper for each car / year in carsToCollect.csv
 
+
+isExist = os.path.exists(date)
+if not isExist:
+      # Create a new directory because it does not exist
+      os.makedirs(date)
+
 logFileName = date + "/logFile.txt"
 f = open(logFileName, "a")
 

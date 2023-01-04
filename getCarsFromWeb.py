@@ -13,11 +13,7 @@ from selenium.webdriver.chrome.options import Options
 def getCars(make, model, year, date):
         
         # Check whether the specified path exists or not
-        isExist = os.path.exists(date)
-        if not isExist:
-
-            # Create a new directory because it does not exist
-            os.makedirs(date)
+       
 
         fileName = (date + "/" + make + " " + model + " " + year + ".csv")
  
